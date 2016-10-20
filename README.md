@@ -80,6 +80,79 @@
 
     #运行单元测试
     npm run unit
+    
+## 前后端分离
+
+项目基于 spa 方式实现前后端分离，后端将所有 url 都返回到同一个 jsp 页面（由前端提供），此 jsp 页面也是前端的入口页面。然后路由由前端控制（基于vue-router），根据不同的 url 加载相应数据和组件进行渲染。
+在开发中，前后端只需定义好接口格式，前端通过 mock 的方式，即可开始编码，无需等待后端接口 ready。
+
+## 模块化
+
+开发时可以使用 ES2015 module 方式，构建时每个文件会编译成 amd 模块。
+
+## 组件化
+
+整个应用通过 vue 组件的方式搭建起来，通过 vue-router 控制相应组件的展现, 组件树结构如下：
+
+    app.vue                         根组件（整个应用只有一个）
+        ├──view1.vue                    页面级组件，放在 views 目录里面，有子组件时，可以建立子目录
+        │   ├──component1.vue               功能组件，公用的放在 components 目录，否则放在 views 子目录
+        │   ├──component2.vue
+        │   └──component3.vue
+        ├──view2.vue
+        │   ├──component1.vue
+        │   └──component4.vue
+        └──view3.vue
+            ├──component5.vue
+            ……
+
+
+## 单元测试
+
+可以为每个组件编写单元测试，放在 `test/unit/specs` 目录下面, 单元测试用例的目录结构建议和测试的文件保持一致（相对于src），每个测试用例文件名以 `.spec.js`结尾。
+执行 `npm run unit` 时会遍历所有的 `spec.js` 文件，产出测试报告在 `test/unit/coverage` 目录。
+
+
+## 联调方式
+
+前后端分离后，由于服务端和前端的开发环境处于2台不同的机器上，后端工程里面的入口 jsp 中引用的 js 文件地址需要指向前端环境中的地址，连涛时才能显示最新的修改。
+主要有2种实现方式：
+
+1. jsp 文件引用一个固定域名（如 debughost）的 js 文件， 后端机器上通过修改此域名的ip指向前端机器，达到引入前端环境 js 的目的。
+2. jsp 文件通过获取一个url参数（如 debughost）的值，这个值为前端机器的 ip 地址，再动态的插入一个 script 标签引入这个 ip 的前端 js 文件。
+
+举个例子，假设前端机器的 ip 为 172.16.36.90，需要加载前端的js文件地址为：`http://172.16.36.90:8081/main.js`， 那么后端同学的机器中需要在 host 文件加一条记录：`172.16.36.90 debughost`。
+而入口 jsp 页面中则通过以下代码开加载前端js： 
+
+    var debughost = 'debughost';
+    location.search.substr(1).split('&').forEach(function (item) {
+        var arr = item.split('=');
+        var key = arr[0];
+        var value = arr[1];
+        if (key === 'debughost') {
+            debughost = value;
+        }
+    });
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'http://' + debughost + ':8081/main.js?' + (new Date()).getTime();
+    document.head.appendChild(script);
+
+这样，jsp页面默认会加载 `http://debughost:8081/main.js`这个文件。
+此外，如果不想用 debughost 这个域名的 js 文件，访问 jsp 时候还可以通过 url 带入 debughost 参数来指定前端 ip 。
+
+## 部署方案
+
+分离后前后端代码会存放在2个单独的 git 仓库中，构建过程也是分开的。后端构建时，需要依赖前端的构建结果。具体流程如下：
+
+1. pull 前端项目代码
+2. 构建前端（构建结果放在dist目录）
+3. pull 后端代码
+4. 将前端的构建结果（dist目录里的文件）复制到后端工程中
+5. 构建后端
+
+提测时，此过程可以借助 jenkins 配置。上线时，需要运维同学配合修改上线脚本。
+
 
 ## 相关资源
 
