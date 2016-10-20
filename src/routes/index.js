@@ -18,6 +18,6 @@ const routes = [
 });
 
 // 404 页
-routes.push({path: '*', component: NotFound, name: 'netfound'});
+routes.push({path: '*', component: NotFound, name: 'notfound'});
 
 export default routes;
