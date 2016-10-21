@@ -20,12 +20,9 @@ describe('notfound.vue', () => {
         });
       }
     });
-
-    console.log(111);
   });
 
   it('should render not found', () => {
-    console.log(222)
     expect(vm.$el.querySelector('p').innerText.trim()).to.equal('404 Not Found！')
   })
 })
