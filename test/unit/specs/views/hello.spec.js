@@ -2,11 +2,13 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import storeOption from 'store';
 import Hello from 'views/hello';
-
 Vue.use(Vuex);
 const store = new Vuex.Store(storeOption);
 
 describe('hello.vue', () => {
+
+
+
   it('should render correct contents', () => {
     const vm = new Vue({
       el: document.createElement('div'),
