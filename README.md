@@ -157,6 +157,7 @@
 ## 相关资源
 
 - vue.js 官网：[https://vuejs.org/](https://vuejs.org/)
+- vue.js 中文网： [http://vuefe.cn/](http://vuefe.cn/)
 - vue-router 文档：[http://router.vuejs.org/zh-cn/index.html/](http://router.vuejs.org/zh-cn/index.html)
 - vuex 文档：[http://vuex.vuejs.org/](http://vuex.vuejs.org/)
 - webpack 文档：[https://webpack.github.io/docs/](https://webpack.github.io/docs/)
