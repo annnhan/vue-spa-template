@@ -84,7 +84,27 @@
 ## 前后端分离
 
 项目基于 spa 方式实现前后端分离，后端将所有 url 都返回到同一个 jsp 页面（由前端提供），此 jsp 页面也是前端的入口页面。然后路由由前端控制（基于vue-router），根据不同的 url 加载相应数据和组件进行渲染。
-在开发中，前后端只需定义好接口格式，前端通过 mock 的方式，即可开始编码，无需等待后端接口 ready。
+
+## 接口 mock
+
+前后端分离后，开发前需要和后端同学定义好接口信息（请求地址，参数，返回信息等），前端通过 mock 的方式，即可开始编码，无需等待后端接口 ready。
+项目的本地开发服务器是基于 express 搭建的，通过 express 的中间件机制，我们已经在dev-server中添加了接口 mock 功能。
+开发时，接口的 mock 数据统一放在 mock 目录下，每个文件内如下：
+
+
+    module.exports = {
+    
+      // 接口地址
+      api: '/api/hello',
+    
+      // 返回数据 参考http://expressjs.com/zh-cn/4x/api.html
+      response: function (req, res) {
+        res.send(`
+          <p>hello vue!</p>
+        `);
+      }
+    }
+
 
 ## 模块化
 
