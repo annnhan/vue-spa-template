@@ -134,31 +134,13 @@
 
 ## 联调方式
 
-前后端分离后，由于服务端和前端的开发环境处于2台不同的机器上，后端工程里面的入口 jsp 中引用的 js 文件地址需要指向前端环境中的地址，联调时才能显示最新的修改。
-主要有2种实现方式：
+前后端分离后，由于服务端和前端的开发环境处于2台不同的机器上，前端的异步请求需要代理到后端机器中。
+联调的时候，只需通过 proxy 参数运行 dev 脚本即可，所有 mock 目录下定义的接口将会转发到 proxy 参数指定的机器：
 
-1. jsp 文件引用一个固定域名（如 debughost）的 js 文件， 后端机器上通过修改此域名的ip指向前端机器，达到引入前端环境 js 的目的。
-2. jsp 文件通过获取一个url参数（如 debughost）的值，这个值为前端机器的 ip 地址，再动态的插入一个 script 标签引入这个 ip 的前端 js 文件。
+    // 172.16.36.90：8083 为后端机器的环境地址
+    npm run dev -- --proxy=172.16.36.90/:8083
 
-举个例子，假设前端机器的 ip 为 172.16.36.90，需要加载前端的js文件地址为：`http://172.16.36.90:8081/main.js`， 那么后端同学的机器中需要在 host 文件加一条记录：`172.16.36.90 debughost`。
-而入口 jsp 页面中则通过以下代码开加载前端js： 
-
-    var debughost = 'debughost';
-    location.search.substr(1).split('&').forEach(function (item) {
-        var arr = item.split('=');
-        var key = arr[0];
-        var value = arr[1];
-        if (key === 'debughost') {
-            debughost = value;
-        }
-    });
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = 'http://' + debughost + ':8081/main.js?' + (new Date()).getTime();
-    document.head.appendChild(script);
-
-这样，jsp页面默认会加载 `http://debughost:8081/main.js`这个文件。
-此外，如果不想用 debughost 这个域名的 js 文件，访问 jsp 时候还可以通过 url 带入 debughost 参数来指定前端 ip 。
+这样，如果 mock 目录下有定了了接口 /api/hello ，将会转发到 http://172.16.36.90/:8083/api/hello
 
 ## 部署方案
 
