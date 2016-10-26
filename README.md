@@ -1,6 +1,6 @@
 ## 项目简介
 
-基于 vue.js 的前端项目模板，主要用于前后端分离后的单页应用开发，可以在开发时使用 ES2015、scss 等最新语言特性。项目包含：
+基于 vue.js 的前端开发环境，用于前后端分离后的单页应用开发，可以在开发时使用 ES2015、scss 等最新语言特性。项目包含：
 
 - 基础库: `vue.js`、`vue-router`、`vuex`、`whatwg-fetch`
 - 编译/打包工具：`webpack`、`babel`、`node-sass`
@@ -88,7 +88,7 @@
 ## 接口 mock
 
 前后端分离后，开发前需要和后端同学定义好接口信息（请求地址，参数，返回信息等），前端通过 mock 的方式，即可开始编码，无需等待后端接口 ready。
-项目的本地开发服务器是基于 express 搭建的，通过 express 的中间件机制，我们已经在dev-server中添加了接口 mock 功能。
+项目的本地开发服务器是基于 express 搭建的，通过 express 的中间件机制，我们已经在 dev-server 中添加了接口 mock 功能。
 开发时，接口的 mock 数据统一放在 mock 目录下，每个文件内如下：
 
 
@@ -135,31 +135,13 @@
 
 ## 联调方式
 
-前后端分离后，由于服务端和前端的开发环境处于2台不同的机器上，后端工程里面的入口 jsp 中引用的 js 文件地址需要指向前端环境中的地址，联调时才能显示最新的修改。
-主要有2种实现方式：
+前后端分离后，由于服务端和前端的开发环境处于2台不同的机器上，前端的异步请求需要代理到后端机器中。
+联调的时候，只需通过 proxy 参数运行 dev 脚本即可，所有 mock 目录下定义的接口将会转发到 proxy 参数指定的机器：
 
-1. jsp 文件引用一个固定域名（如 debughost）的 js 文件， 后端机器上通过修改此域名的ip指向前端机器，达到引入前端环境 js 的目的。
-2. jsp 文件通过获取一个url参数（如 debughost）的值，这个值为前端机器的 ip 地址，再动态的插入一个 script 标签引入这个 ip 的前端 js 文件。
+    // 172.16.36.90：8083 为后端机器的环境地址
+    npm run dev -- --proxy=172.16.36.90/:8083
 
-举个例子，假设前端机器的 ip 为 172.16.36.90，需要加载前端的js文件地址为：`http://172.16.36.90:8081/main.js`， 那么后端同学的机器中需要在 host 文件加一条记录：`172.16.36.90 debughost`。
-而入口 jsp 页面中则通过以下代码开加载前端js： 
-
-    var debughost = 'debughost';
-    location.search.substr(1).split('&').forEach(function (item) {
-        var arr = item.split('=');
-        var key = arr[0];
-        var value = arr[1];
-        if (key === 'debughost') {
-            debughost = value;
-        }
-    });
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = 'http://' + debughost + ':8081/main.js?' + (new Date()).getTime();
-    document.head.appendChild(script);
-
-这样，jsp页面默认会加载 `http://debughost:8081/main.js`这个文件。
-此外，如果不想用 debughost 这个域名的 js 文件，访问 jsp 时候还可以通过 url 带入 debughost 参数来指定前端 ip 。
+这样，如果 mock 目录下有定了了接口 /api/hello ，将会转发到 http://172.16.36.90/:8083/api/hello
 
 ## 部署方案
 
@@ -177,6 +159,7 @@
 ## 相关资源
 
 - vue.js 官网：[https://vuejs.org/](https://vuejs.org/)
+- vue.js 中文网： [http://vuefe.cn/](http://vuefe.cn/)
 - vue-router 文档：[http://router.vuejs.org/zh-cn/index.html/](http://router.vuejs.org/zh-cn/index.html)
 - vuex 文档：[http://vuex.vuejs.org/](http://vuex.vuejs.org/)
 - webpack 文档：[https://webpack.github.io/docs/](https://webpack.github.io/docs/)

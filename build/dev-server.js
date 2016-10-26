@@ -1,5 +1,6 @@
 var path = require('path')
 var fs = require('fs')
+var argv = require('optimist').argv;
 var express = require('express')
 var webpack = require('webpack')
 var config = require('../config')
@@ -35,20 +36,21 @@ compiler.plugin('compilation', function (compilation) {
   })
 })
 
-// proxy api requests
-Object.keys(proxyTable).forEach(function (context) {
-  var options = proxyTable[context]
-  if (typeof options === 'string') {
-    options = { target: options }
-  }
-  app.use(proxyMiddleware(context, options))
-});
+//   api requests
+// Object.keys(proxyTable).forEach(function (context) {
+//   var options = proxyTable[context]
+//   if (typeof options === 'string') {
+//     options = { target: options }
+//   }
+//   app.use(proxyMiddleware(context, options))
+// });
 
-// mock api requests
+// mock/proxy api requests
 var mockDir = path.resolve(__dirname, '../mock');
+console.log(argv);
 fs.readdirSync(mockDir).forEach(function (file) {
   var mock = require(path.resolve(mockDir, file));
-  app.use(mock.api, mock.response);
+  app.use(mock.api, argv.proxy ? proxyMiddleware({ target: 'http://' + argv.proxy }) : mock.response);
 });
 
 // handle fallback for HTML5 history API
