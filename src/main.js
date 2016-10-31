@@ -8,33 +8,21 @@ import App from './app';
 import routes from './routes';
 import storeOption from './store';
 
-const main = {
-  init () {
-    Vue.use(Vuex);
-    Vue.use(VueRouter);
+Vue.use(Vuex);
+Vue.use(VueRouter);
 
-    this.loadFetch().then(() => {
-      // 创建一个路由对象用于管理页面的路由
-      const router = new VueRouter({
-        mode: 'history',
-        routes: routes
-      })
-      // 创建一个 store 对象用于管理应用状态
-      const store = new Vuex.Store(storeOption);
-      window.__lendApp__ = new Vue({
-        el: '#app',
-        router,
-        store,
-        render: h => h(App)
-      });
-    });
-  },
+// 创建一个路由对象用于管理页面的路由
+const router = new VueRouter({
+  mode: 'history',
+  routes: routes
+});
 
-  async loadFetch() {
-    return new Promise(function (resolve) {
-      window.fetch ? resolve() : require(['whatwg-fetch'], resolve);
-    })
-  },
-}
+// 创建一个 store 对象用于管理应用状态
+const store = new Vuex.Store(storeOption);
 
-main.init();
+window.__lendApp__ = new Vue({
+  el: '#app',
+  router,
+  store,
+  render: h => h(App)
+});
