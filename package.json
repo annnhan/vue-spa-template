@@ -12,11 +12,11 @@
     "test": "npm run unit && npm run e2e"
   },
   "dependencies": {
-    "promise": "^7.1.1",
     "vue": "^2.0.1",
-    "vue-router": "^2.0.1",
     "vuex": "^2.0.0",
-    "whatwg-fetch": "^1.0.0"
+    "vue-router": "^2.0.1",
+    "whatwg-fetch": "^1.0.0",
+    "es6-promise": "^4.0.5"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",
@@ -36,12 +36,14 @@
     "cross-spawn": "^4.0.2",
     "css-loader": "^0.25.0",
     "eventsource-polyfill": "^0.9.6",
+    "exports-loader": "^0.6.3",
     "express": "^4.13.3",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
     "function-bind": "^1.0.2",
     "html-webpack-plugin": "^2.8.1",
     "http-proxy-middleware": "^0.17.2",
+    "imports-loader": "^0.6.5",
     "inject-loader": "^2.0.1",
     "isparta-loader": "^2.0.0",
     "json-loader": "^0.5.4",
