@@ -47,7 +47,7 @@ compiler.plugin('compilation', function (compilation) {
 
 // mock/proxy api requests
 var mockDir = path.resolve(__dirname, '../mock');
-console.log(argv);
+//console.log(argv);
 fs.readdirSync(mockDir).forEach(function (file) {
   var mock = require(path.resolve(mockDir, file));
   app.use(mock.api, argv.proxy ? proxyMiddleware({ target: 'http://' + argv.proxy }) : mock.response);
