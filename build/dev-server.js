@@ -36,7 +36,7 @@ compiler.plugin('compilation', function (compilation) {
   })
 })
 
-//   api requests
+// proxy api requests
 // Object.keys(proxyTable).forEach(function (context) {
 //   var options = proxyTable[context]
 //   if (typeof options === 'string') {
