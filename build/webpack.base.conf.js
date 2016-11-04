@@ -64,7 +64,7 @@ module.exports = {
   },
   vue: {
     loaders: utils.cssLoaders(),
-    postcss: []
+    postcss: [require('postcss-cssnext')()]
   },
 
   plugins: []
