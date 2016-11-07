@@ -59,7 +59,7 @@ var mockDir = path.resolve(__dirname, '../mock');
       app.use(mock.api, argv.proxy ? proxyMiddleware({target: 'http://' + argv.proxy}) : mock.response);
     }
   });
-})(mockDir);
+})(mockDir);;
 
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')({
