@@ -62,7 +62,7 @@
 
 ## 快速开始
 
-    git clone https://github.com/hanan198501/vue-spa-template.git
+    git clone git@gitlab.puhuitech.cn:lend-fe/vue-spa-template.git
     cd vue-spa-template
     cnpm install
     npm run dev

@@ -36,7 +36,7 @@ compiler.plugin('compilation', function (compilation) {
   })
 })
 
-//   api requests
+// proxy api requests
 // Object.keys(proxyTable).forEach(function (context) {
 //   var options = proxyTable[context]
 //   if (typeof options === 'string') {
@@ -47,10 +47,19 @@ compiler.plugin('compilation', function (compilation) {
 
 // mock/proxy api requests
 var mockDir = path.resolve(__dirname, '../mock');
-fs.readdirSync(mockDir).forEach(function (file) {
-  var mock = require(path.resolve(mockDir, file));
-  app.use(mock.api, argv.proxy ? proxyMiddleware({ target: 'http://' + argv.proxy }) : mock.response);
-});
+(function setMock(mockDir) {
+  fs.readdirSync(mockDir).forEach(function (file) {
+    var filePath = path.resolve(mockDir, file);
+    var mock;
+    if (fs.statSync(filePath).isDirectory()) {
+      setMock(filePath);
+    }
+    else {
+      mock = require(filePath);
+      app.use(mock.api, argv.proxy ? proxyMiddleware({target: 'http://' + argv.proxy}) : mock.response);
+    }
+  });
+})(mockDir);;
 
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')({
