@@ -6,7 +6,7 @@ const Hello = r => require(['views/hello'], r);
 const NotFound = r => require(['views/notfound'], r);
 
 // 根目录
-const rootPath = '/lend-app';
+const rootPath = '';
 
 // 页面路由
 const routes = [
