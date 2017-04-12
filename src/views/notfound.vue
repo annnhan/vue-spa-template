@@ -19,7 +19,7 @@
       'message'
     ]),
     mounted: function () {
-      this.$store.commit('MESSAGE', '404 Not Found！');
+      this.$store.commit('message', '404 Not Found！');
     },
     components: {cTitle}
   }
